@@ -64,18 +64,9 @@
     }
     .titleblock{display:flex;flex-direction:column;line-height:1.15}
     .titleblock .t1{font-weight:800;font-size:14px;letter-spacing:.2px}
-    .titleblock .t2{font-size:12px;color:var(--mb-muted)}
-    .badge{
-      margin-left:auto;
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--mb-line);
-      background: rgba(0,0,0,.25);
-      color: rgba(255,255,255,.88);
-    }
+    /* ✅ removido subtítulo do header (t2 não será mais usado) */
     .chat{
-      height: 560px;
+      height: 620px; /* ganhou espaço ao remover a barra inferior */
       padding:14px;
       overflow:auto;
       scroll-behavior:smooth;
@@ -105,54 +96,19 @@
       color: rgba(255,255,255,.55);
       margin:0 4px 2px;
     }
+
     .quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
     .chip{
       border:1px solid var(--mb-line);
       background: rgba(0,0,0,.18);
       color: rgba(255,255,255,.92);
-      padding:8px 10px;
+      padding:8px 12px;
       border-radius: 999px;
-      font-size:12px;
+      font-size:12.5px;
       cursor:pointer;
       user-select:none;
     }
     .chip:hover{border-color: rgba(255,255,255,.20)}
-
-    .composer{
-      border-top:1px solid var(--mb-line);
-      padding:12px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      background: rgba(0,0,0,.22);
-    }
-    .input{
-      flex:1;
-      border:1px solid var(--mb-line);
-      background: rgba(255,255,255,.06);
-      color:var(--mb-white);
-      border-radius: 14px;
-      padding:11px 12px;
-      outline:none;
-      font-size:13px;
-    }
-    .btn{
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(135deg, var(--mb-yellow), rgba(255,196,0,.65));
-      color: var(--mb-ink);
-      padding:11px 14px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight:900;
-      font-size:12.5px;
-      box-shadow: 0 10px 22px rgba(255,196,0,.18);
-      white-space:nowrap;
-    }
-    .btn.secondary{
-      background: rgba(255,255,255,.08);
-      color: rgba(255,255,255,.92);
-      box-shadow:none;
-    }
 
     /* MODAL (segunda tela) */
     .modal{
@@ -198,7 +154,7 @@
     }
     .full{grid-column:1 / -1}
     label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:rgba(255,255,255,.86)}
-    .field, select, textarea{
+    .field, select, textarea, input[type="file"]{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.22);
       color: var(--mb-white);
@@ -211,6 +167,24 @@
     .req{color: var(--mb-yellow); font-weight:900}
     .hint{font-size:11.5px;color:rgba(255,255,255,.60);margin-top:6px}
     .actions{display:flex;gap:10px;margin-top:12px}
+
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, var(--mb-yellow), rgba(255,196,0,.65));
+      color: var(--mb-ink);
+      padding:11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:12.5px;
+      box-shadow: 0 10px 22px rgba(255,196,0,.18);
+      white-space:nowrap;
+    }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92);
+      box-shadow:none;
+    }
   </style>
 </head>
 
@@ -220,18 +194,13 @@
       <div class="logo">mb</div>
       <div class="titleblock">
         <div class="t1">Suporte More Buzz</div>
-        <div class="t2">Guia rápido + abertura de chamado</div>
       </div>
-      <div class="badge" id="statusBadge">online</div>
+      <!-- ✅ removido "online" -->
     </div>
 
     <div class="chat" id="chat"></div>
 
-    <div class="composer">
-      <input class="input" id="text" placeholder="Digite aqui… (ou clique em uma opção acima)" />
-      <button class="btn secondary" id="btnGuide">Guia rápido</button>
-      <button class="btn" id="btnTicket">Abrir chamado</button>
-    </div>
+    <!-- ✅ removido composer (campo de digitação + botões inferiores) -->
   </section>
 
   <!-- MODAL: ABERTURA DE CHAMADO (segunda tela) -->
@@ -278,6 +247,17 @@
             <input class="field" name="cpfCnpj" placeholder="Somente números (se preferir)" />
           </label>
 
+          <!-- ✅ NOVO: anexar evidência -->
+          <label class="full">Anexar evidência (opcional)
+            <input
+              class="field"
+              type="file"
+              name="evidencia"
+              accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+            />
+            <div class="hint">Formatos aceitos: PDF, PNG, JPG/JPEG.</div>
+          </label>
+
           <div class="full hint" id="ticketHint">
             Ao enviar, os dados serão encaminhados via API para o CRM responsável por tratar o chamado.
           </div>
@@ -293,22 +273,23 @@
 
 <script>
   // =========================
-  // CONFIG
+  // CONFIG (n8n)
   // =========================
-  const FAQ_SOURCE  = "./morebuzz_faq.json";   // coloque o JSON aqui no mesmo diretório (ou um endpoint)
-  const API_ENDPOINT = "https://SEU-N8N-WEBHOOK-AQUI/api/tickets"; // webhook do n8n
+  // Endpoint que responde o "Guia rápido" com base na FAQ (resumo prático)
+  const GUIDE_ENDPOINT  = "https://SEU-N8N-WEBHOOK-AQUI/mb/guia";
+
+  // Endpoint que recebe abertura de chamado (com anexo)
+  const TICKET_ENDPOINT = "https://SEU-N8N-WEBHOOK-AQUI/mb/chamado";
 
   // =========================
   // STATE
   // =========================
-  let FAQ = []; // { id, order, title, html }
   let currentTopic = null;
 
   // =========================
   // HELPERS
   // =========================
   const chat = document.getElementById("chat");
-  const text = document.getElementById("text");
 
   function now(){
     const d = new Date();
@@ -319,28 +300,6 @@
     return String(s || "").replace(/[&<>"']/g, m => ({
       "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
     }[m]));
-  }
-
-  function stripHtml(html){
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html || "";
-    return (tmp.textContent || tmp.innerText || "").replace(/\s+/g," ").trim();
-  }
-
-  // resumo enxuto sem inventar (pega as primeiras frases / limite)
-  function summarizeFromHtml(html, max=260){
-    const plain = stripHtml(html);
-    if(!plain) return "";
-    const parts = plain.split(/(?<=[.!?])\s+/);
-    let out = "";
-    for(const p of parts){
-      if((out + " " + p).trim().length > max) break;
-      out = (out ? out + " " : "") + p;
-      if(out.length >= max) break;
-    }
-    if(!out) out = plain.slice(0, max);
-    if(plain.length > out.length) out = out.replace(/\s+$/,"") + "…";
-    return out;
   }
 
   function addMsg(who, html){
@@ -362,129 +321,151 @@
       wrap.appendChild(meta);
       wrap.appendChild(bubble);
     }
+
     chat.appendChild(wrap);
     chat.scrollTop = chat.scrollHeight;
+    return bubble; // <- para anexar botões reais dentro do bubble
   }
 
+  // ✅ FIX: cria chips como DOM (clicáveis), sem outerHTML
   function quickButtons(buttons, intro="Escolha uma opção:"){
+    const bubble = addMsg("bot", `<div>${intro}</div>`);
     const div = document.createElement("div");
     div.className = "quick";
+
     buttons.forEach(b=>{
       const c = document.createElement("div");
       c.className = "chip";
       c.textContent = b.label;
-      c.onclick = b.onClick;
+      c.addEventListener("click", b.onClick);
       div.appendChild(c);
     });
-    addMsg("bot", `<div>${intro}</div>` + div.outerHTML);
+
+    bubble.appendChild(div);
   }
 
   function onlyDigits(v){
     return String(v || "").replace(/\D+/g,"");
   }
 
-  // categorização simples por palavras (ajustável)
-  function categoryFor(title){
-    const t = (title||"").toLowerCase();
-
-    if(t.includes("campanha") || t.includes("ff indica") || t.includes("participar")) return "🚀 Sobre a campanha";
-    if(t.includes("divulgador") || t.includes("parceiro") || t.includes("influenciador") || t.includes("corporativo")) return "👤 Perfis e participação";
-    if(t.includes("cadastro") || t.includes("acesso") || t.includes("login") || t.includes("senha")) return "🔐 Acesso e cadastro";
-    if(t.includes("link") || t.includes("qr code") || t.includes("qr") ) return "🔗 Link e QR Code";
-    if(t.includes("negócio") || t.includes("acompanhar") || t.includes("status") ) return "📈 Acompanhamento";
-    if(t.includes("recebe") || t.includes("valores") || t.includes("resgate") || t.includes("mínimo") ) return "💰 Pagamentos e resgate";
-    if(t.includes("materiais") || t.includes("apoio") || t.includes("divulgação")) return "📣 Divulgação e materiais";
-    return "🧩 Outros";
-  }
-
+  // =========================
+  // GUIA RÁPIDO (fluxo via n8n)
+  // =========================
   function buildGuideMenu(){
-    // agrupa por categoria
-    const groups = {};
-    for(const item of FAQ){
-      const cat = categoryFor(item.title);
-      (groups[cat] ||= []).push(item);
-    }
+    // 1) pede categorias ao n8n (ou lista fixa, se preferirem)
+    // Aqui vamos simplificar: chamamos o n8n pedindo o menu inicial
+    addMsg("user", "Guia rápido");
+    addMsg("bot", "Certo — me diz o que você quer entender 👇");
 
-    const cats = Object.keys(groups);
-    if(!cats.length){
-      addMsg("bot", "Não consegui carregar a base de conhecimento agora. Você pode abrir um chamado e o time te ajuda ✅");
-      return;
-    }
+    // Menu inicial (pode vir do n8n também, mas manter fixo é estável)
+    const categories = [
+      { id: "campanha", label: "Sobre a campanha" },
+      { id: "cadastro", label: "Cadastro e acesso" },
+      { id: "acompanhamento", label: "Acompanhamento" },
+      { id: "qr", label: "Link e QR Code" },
+      { id: "pagamentos", label: "Pagamentos e resgate" },
+      { id: "materiais", label: "Divulgação e materiais" }
+    ];
 
-    addMsg("bot", "Beleza — me diz o que você quer entender e eu te explico de forma rápida 👇");
-
-    // primeiro nível: categorias
     quickButtons(
-      cats.slice(0, 8).map(cat => ({
-        label: cat,
-        onClick: () => buildTopicsMenu(cat, groups[cat])
+      categories.map(c => ({
+        label: c.label,
+        onClick: () => buildTopicsMenu(c.id, c.label)
       })),
       "Escolha um tema:"
     );
   }
 
-  function buildTopicsMenu(cat, items){
-    addMsg("user", escapeHtml(cat));
+  async function buildTopicsMenu(categoryId, categoryLabel){
+    addMsg("user", categoryLabel);
+    addMsg("bot", "Beleza — selecione uma opção:");
 
-    const top = items
-      .slice()
-      .sort((a,b)=> a.order - b.order)
-      .slice(0, 10);
+    try{
+      const res = await fetch(GUIDE_ENDPOINT, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ action: "list_topics", categoryId })
+      });
 
-    quickButtons(
-      top.map(it => ({
-        label: it.title,
-        onClick: () => answerTopic(it)
-      })),
-      "Qual ponto você quer entender?"
-    );
+      if(!res.ok) throw new Error("Falha ao carregar tópicos.");
+      const data = await res.json(); // { topics: [{topicId,title}] }
+
+      quickButtons(
+        (data.topics || []).slice(0, 10).map(t => ({
+          label: t.title,
+          onClick: () => answerTopic(t.topicId, t.title)
+        })),
+        "Qual ponto você quer entender?"
+      );
+
+    }catch(e){
+      addMsg("bot", "Não consegui carregar as opções agora. Você pode abrir um chamado e o time te ajuda ✅");
+    }
   }
 
-  function answerTopic(item){
-    currentTopic = item.title;
+  async function answerTopic(topicId, title){
+    currentTopic = title;
+    addMsg("user", title);
 
-    addMsg("user", escapeHtml(item.title));
+    try{
+      const res = await fetch(GUIDE_ENDPOINT, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ action: "answer", topicId })
+      });
 
-    const resumo = summarizeFromHtml(item.html, 260);
+      if(!res.ok) throw new Error("Falha ao carregar resposta.");
+      const data = await res.json(); // { summary, canExpand }
 
-    addMsg("bot",
-      `<div><strong>Entendi.</strong> Aqui vai um resumo prático:</div>
-       <div style="margin-top:8px;opacity:.95">${escapeHtml(resumo)}</div>
-       <div style="margin-top:10px;opacity:.8;font-size:12.5px">Se você quiser, eu posso detalhar mais ou abrir um chamado.</div>
-       <div class="quick">
-         <div class="chip" id="more">📌 Detalhar mais</div>
-         <div class="chip" id="solved">✅ Resolvido</div>
-         <div class="chip" id="openTicket">🛠️ Abrir chamado</div>
-       </div>`
-    );
+      addMsg("bot",
+        `<div><strong>Resumo rápido:</strong></div>
+         <div style="margin-top:8px;">${escapeHtml(data.summary || "")}</div>`
+      );
 
-    setTimeout(()=>{
-      const more = document.getElementById("more");
-      const solved = document.getElementById("solved");
-      const openTicket = document.getElementById("openTicket");
+      quickButtons(
+        [
+          ...(data.canExpand ? [{
+            label: "Detalhar mais",
+            onClick: () => expandTopic(topicId)
+          }] : []),
+          { label: "Resolvido", onClick: () => addMsg("bot","Perfeito ✅ Se precisar, estou por aqui.") },
+          { label: "Abrir chamado", onClick: () => openTicketModal(`Tema: ${title}`) }
+        ],
+        "Como você quer seguir?"
+      );
 
-      if(more) more.onclick = () => {
-        // aqui NÃO mostramos a FAQ "crua" inteira, mostramos uma versão intermediária (mais completa)
-        const mid = summarizeFromHtml(item.html, 520);
-        addMsg("bot", `<div>Claro — um pouco mais de contexto:</div><div style="margin-top:8px;">${escapeHtml(mid)}</div>`);
-      };
+    }catch(e){
+      addMsg("bot", "Não consegui carregar essa resposta agora. Você pode abrir um chamado e o time te ajuda ✅");
+    }
+  }
 
-      if(solved) solved.onclick = () => addMsg("bot", "Perfeito ✅ Se precisar, estou por aqui.");
+  async function expandTopic(topicId){
+    addMsg("user", "Detalhar mais");
 
-      if(openTicket) openTicket.onclick = () => openTicketModal(`Tema: ${item.title}`);
-    }, 0);
+    try{
+      const res = await fetch(GUIDE_ENDPOINT, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ action: "expand", topicId })
+      });
+
+      if(!res.ok) throw new Error("Falha ao detalhar.");
+      const data = await res.json(); // { detail }
+
+      addMsg("bot", `<div>${escapeHtml(data.detail || "")}</div>`);
+    }catch(e){
+      addMsg("bot", "Não consegui detalhar agora. Se preferir, abra um chamado ✅");
+    }
   }
 
   // =========================
   // MODAL (Chamado)
   // =========================
   const modal = document.getElementById("modal");
-  const ticketSubtitle = document.getElementById("ticketSubtitle");
   const ticketHint = document.getElementById("ticketHint");
 
   function openTicketModal(prefill){
     modal.classList.add("show");
-    ticketSubtitle.textContent = "Envie sua solicitação para o time responsável";
     ticketHint.innerHTML = prefill
       ? `Contexto selecionado: <strong>${escapeHtml(prefill)}</strong>. (Opcional: detalhe na descrição.)`
       : "Ao enviar, os dados serão encaminhados via API para o CRM responsável por tratar o chamado.";
@@ -493,12 +474,11 @@
     modal.classList.remove("show");
   }
 
-  document.getElementById("btnTicket").onclick = () => openTicketModal(currentTopic ? currentTopic : "");
   document.getElementById("btnClose").onclick = closeTicketModal;
   document.getElementById("btnCancel").onclick = closeTicketModal;
   modal.addEventListener("click", (e)=>{ if(e.target === modal) closeTicketModal(); });
 
-  // submit do chamado
+  // submit do chamado (✅ agora com FormData para suportar anexo)
   document.getElementById("ticketForm").addEventListener("submit", async (e)=>{
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -515,78 +495,49 @@
       createdAt: new Date().toISOString()
     };
 
+    // envia como multipart/form-data
+    const form = new FormData();
+    form.append("data", JSON.stringify(payload));
+
+    const file = fd.get("evidencia");
+    if(file && file instanceof File && file.size > 0){
+      form.append("evidencia", file, file.name);
+    }
+
     closeTicketModal();
-    addMsg("user", `🛠️ Abrir chamado (${escapeHtml(payload.tipoSolicitacao)})`);
+    addMsg("user", "Abrir chamado");
     addMsg("bot", "Perfeito — enviando sua solicitação…");
 
     try{
-      const res = await fetch(API_ENDPOINT, {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(payload)
-      });
-
+      const res = await fetch(TICKET_ENDPOINT, { method:"POST", body: form });
       if(!res.ok){
         const t = await res.text();
         throw new Error(`HTTP ${res.status} - ${t}`);
       }
-
       const data = await res.json(); // { ticketId/protocolo, status }
+
       const protocolo = data.ticketId || data.protocolo || "gerado";
-
-      addMsg("bot", `Chamado registrado ✅<br/><strong>Protocolo:</strong> ${escapeHtml(protocolo)}<br/>Se necessário, o time retornará por e-mail/WhatsApp.`);
+      addMsg("bot", `Chamado registrado ✅<br/><strong>Protocolo:</strong> ${escapeHtml(protocolo)}`);
       e.target.reset();
-
     }catch(err){
       console.error(err);
-      addMsg("bot", `⚠️ Não consegui registrar agora.<br/>Tente novamente ou abra por outro canal.<br/><span style="opacity:.75;font-size:12px;">${escapeHtml(err.message)}</span>`);
-    }
-  });
-
-  // =========================
-  // COMPOSER (texto livre)
-  // =========================
-  document.getElementById("btnGuide").onclick = () => buildGuideMenu();
-
-  document.getElementById("text").addEventListener("keydown", (e)=>{
-    if(e.key === "Enter"){
-      const v = text.value.trim();
-      if(!v) return;
-      addMsg("user", escapeHtml(v));
-      text.value = "";
-      addMsg("bot", "Entendi. Pra eu te guiar rápido, clique em <strong>Guia rápido</strong> e escolha um tema — ou abra um chamado.");
+      addMsg("bot", `⚠️ Não consegui registrar agora.<br/>Tente novamente.<br/><span style="opacity:.75;font-size:12px;">${escapeHtml(err.message)}</span>`);
     }
   });
 
   // =========================
   // INIT
   // =========================
-  async function loadFaq(){
-    try{
-      const res = await fetch(FAQ_SOURCE);
-      if(!res.ok) throw new Error("Falha ao carregar base de conhecimento.");
-      FAQ = await res.json();
-    }catch(e){
-      FAQ = [];
-      console.warn(e);
-    }
-  }
+  addMsg("bot", "Olá! 👋 Eu sou o suporte da More Buzz.<br/>Como você quer seguir?");
 
-  function start(){
-    addMsg("bot",
-      "Olá! 👋 Eu sou o suporte da <strong>More Buzz</strong>.<br/>Como você quer seguir?"
-    );
-
-    quickButtons([
-      { label:"🧭 Entender como funciona (Guia rápido)", onClick: ()=> buildGuideMenu() },
-      { label:"🛠️ Abrir chamado (TI)", onClick: ()=> openTicketModal("") }
-    ]);
-  }
-
-  (async ()=>{
-    await loadFaq();
-    start();
-  })();
+  // ✅ aqui são os únicos botões iniciais (sem ícones/textos extras)
+  quickButtons(
+    [
+      { label:"Guia rápido", onClick: buildGuideMenu },
+      { label:"Abrir chamado", onClick: () => openTicketModal("") }
+    ],
+    "Escolha uma opção:"
+  );
 </script>
 </body>
 </html>
