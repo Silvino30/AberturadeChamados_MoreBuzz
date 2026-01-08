@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>More Buzz • Suporte</title>
+  <style>
+    :root{
+      /* Identidade (inspirada no visual roxo + amarelo da marca) */
+      --mb-purple:#6A00FF;
+      --mb-purple-2:#8A2BFF;
+      --mb-yellow:#FFC400;
+      --mb-ink:#0E1020;
+      --mb-bg:#0B0C14;
+      --mb-card:#11142A;
+      --mb-line:rgba(255,255,255,.10);
+      --mb-muted:rgba(255,255,255,.72);
+      --mb-white:#FFFFFF;
+
+      --radius-xl:18px;
+      --radius-lg:14px;
+      --shadow: 0 18px 50px rgba(0,0,0,.55);
+      --shadow-soft: 0 10px 25px rgba(0,0,0,.35);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue";
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(106,0,255,.25), transparent 60%),
+        radial-gradient(700px 450px at 80% 20%, rgba(255,196,0,.14), transparent 55%),
+        linear-gradient(180deg, var(--mb-bg), #070812 70%);
+      color:var(--mb-white);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .app{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+    }
+
+    @media (max-width: 880px){
+      .app{grid-template-columns:1fr}
+    }
+
+    .panel{
+      border:1px solid var(--mb-line);
+      background: linear-gradient(180deg, rgba(17,20,42,.92), rgba(12,13,26,.92));
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .header{
+      padding:16px 16px 14px;
+      border-bottom:1px solid var(--mb-line);
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background:
+        linear-gradient(90deg, rgba(106,0,255,.22), rgba(255,196,0,.10));
+    }
+
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: radial-gradient(circle at 30% 25%, var(--mb-yellow), rgba(255,196,0,.25) 55%, rgba(106,0,255,.35) 75%),
+                  linear-gradient(135deg, rgba(106,0,255,.75), rgba(106,0,255,.15));
+      box-shadow: var(--shadow-soft);
+      display:grid; place-items:center;
+      font-weight:800;
+      color:var(--mb-ink);
+      letter-spacing:-.5px;
+    }
+
+    .titleblock{display:flex;flex-direction:column;line-height:1.15}
+    .titleblock .t1{font-weight:800;font-size:14px;letter-spacing:.2px}
+    .titleblock .t2{font-size:12px;color:var(--mb-muted)}
+    .badge{
+      margin-left:auto;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--mb-line);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.88);
+    }
+
+    .chat{
+      height: 520px;
+      padding:14px;
+      overflow:auto;
+      scroll-behavior:smooth;
+    }
+
+    .msg{
+      display:flex;
+      margin:10px 0;
+      gap:10px;
+      align-items:flex-end;
+    }
+    .msg.bot{justify-content:flex-start}
+    .msg.user{justify-content:flex-end}
+
+    .bubble{
+      max-width: 80%;
+      padding:12px 12px;
+      border-radius: 16px;
+      border:1px solid var(--mb-line);
+      background: rgba(0,0,0,.18);
+      box-shadow: 0 6px 16px rgba(0,0,0,.25);
+      font-size:13.5px;
+      line-height:1.45;
+    }
+    .msg.user .bubble{
+      background: linear-gradient(135deg, rgba(106,0,255,.65), rgba(138,43,255,.35));
+      border-color: rgba(255,255,255,.12);
+    }
+    .msg.bot .bubble{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    }
+
+    .meta{
+      font-size:11px;
+      color: rgba(255,255,255,.55);
+      margin:0 4px 2px;
+    }
+
+    .composer{
+      border-top:1px solid var(--mb-line);
+      padding:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      background: rgba(0,0,0,.22);
+    }
+    .input{
+      flex:1;
+      border:1px solid var(--mb-line);
+      background: rgba(255,255,255,.06);
+      color:var(--mb-white);
+      border-radius: 14px;
+      padding:11px 12px;
+      outline:none;
+      font-size:13px;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, var(--mb-yellow), rgba(255,196,0,.65));
+      color: var(--mb-ink);
+      padding:11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12.5px;
+      box-shadow: 0 10px 22px rgba(255,196,0,.18);
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92);
+      box-shadow:none;
+    }
+
+    .quick{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .chip{
+      border:1px solid var(--mb-line);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      padding:8px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip:hover{border-color: rgba(255,255,255,.20)}
+
+    /* Painel lateral (FAQ/Chamado) */
+    .side{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--mb-line);
+      background: rgba(0,0,0,.18);
+      border-radius: var(--radius-xl);
+      padding:14px;
+    }
+    .card h3{
+      margin:0 0 6px;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .card p{
+      margin:0;
+      font-size:12.5px;
+      color:var(--mb-muted);
+      line-height:1.5;
+    }
+
+    .faqlist{
+      max-height: 270px;
+      overflow:auto;
+      margin-top:10px;
+      border-top:1px dashed rgba(255,255,255,.12);
+      padding-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .faqitem{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      padding:10px 10px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size:12.5px;
+      line-height:1.35;
+    }
+    .faqitem:hover{border-color: rgba(255,255,255,.18)}
+    .small{
+      font-size:11.5px;
+      color: rgba(255,255,255,.62);
+      margin-top:8px;
+    }
+
+    /* Form */
+    .form{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .form .full{grid-column: 1 / -1;}
+    label{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size:12px;
+      color: rgba(255,255,255,.85);
+    }
+    .field, select, textarea{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color: var(--mb-white);
+      border-radius: 14px;
+      padding:10px 10px;
+      outline:none;
+      font-size:13px;
+    }
+    textarea{min-height: 92px; resize: vertical;}
+    .req{color: var(--mb-yellow); font-weight:800}
+    .hint{font-size:11.5px;color:rgba(255,255,255,.60); margin-top:6px;}
+    .actions{display:flex; gap:10px; margin-top:10px;}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- CHAT -->
+    <section class="panel" aria-label="Chat de Suporte">
+      <div class="header">
+        <div class="logo">mb</div>
+        <div class="titleblock">
+          <div class="t1">Suporte More Buzz</div>
+          <div class="t2">FAQ + Abertura de chamado</div>
+        </div>
+        <div class="badge" id="statusBadge">online</div>
+      </div>
+
+      <div class="chat" id="chat"></div>
+
+      <div class="composer">
+        <input class="input" id="text" placeholder="Digite aqui… (ou use os botões)" />
+        <button class="btn secondary" id="btnFaq">FAQ</button>
+        <button class="btn" id="btnSend">Enviar</button>
+      </div>
+    </section>
+
+    <!-- LATERAL -->
+    <aside class="panel side" aria-label="Ações">
+      <div class="card">
+        <h3>Atalhos</h3>
+        <p>Escolha um caminho: consultar FAQ ou abrir chamado para o time de TI.</p>
+        <div class="actions">
+          <button class="btn secondary" id="btnOpenFaq">Ver FAQ</button>
+          <button class="btn" id="btnOpenForm">Abrir chamado</button>
+        </div>
+        <div class="small">Dica: se a FAQ não resolver, você abre um chamado em 30s.</div>
+      </div>
+
+      <div class="card" id="faqCard">
+        <h3>FAQ (tópicos)</h3>
+        <p>Clique em um tópico para enviar ao chat.</p>
+        <div class="faqlist" id="faqList"></div>
+      </div>
+
+      <div class="card" id="formCard" style="display:none;">
+        <h3>Abertura de Chamado</h3>
+        <p>Preencha os dados abaixo. Campos com <span class="req">*</span> são obrigatórios.</p>
+
+        <form id="ticketForm" class="form">
+          <label class="full">Nome completo <span class="req">*</span>
+            <input class="field" name="nomeCompleto" required />
+          </label>
+
+          <label>E-mail <span class="req">*</span>
+            <input class="field" name="email" type="email" required />
+          </label>
+
+          <label>Telefone (WhatsApp) <span class="req">*</span>
+            <input class="field" name="telefone" placeholder="DDD + número" required />
+          </label>
+
+          <label class="full">Tipo solicitação <span class="req">*</span>
+            <select name="tipoSolicitacao" required>
+              <option value="" selected disabled>Selecione…</option>
+              <option>Problema técnico</option>
+              <option>Dúvida</option>
+              <option>Solicitação</option>
+            </select>
+          </label>
+
+          <label class="full">Descrição da solicitação (opcional)
+            <textarea name="descricao" placeholder="Descreva o cenário, mensagens de erro, onde ocorreu, etc."></textarea>
+          </label>
+
+          <label class="full">CPF/CNPJ (opcional)
+            <input class="field" name="cpfCnpj" placeholder="Somente números (se preferir)" />
+          </label>
+
+          <div class="full hint" id="formHint">
+            Ao enviar, sua solicitação será encaminhada via API para a ferramenta do time de TI.
+          </div>
+
+          <div class="full actions">
+            <button type="button" class="btn secondary" id="btnCancelForm">Cancelar</button>
+            <button type="submit" class="btn" id="btnSubmitForm">Enviar chamado</button>
+          </div>
+        </form>
+      </div>
+
+    </aside>
+
+  </div>
+
+<script>
+  // =========================
+  // CONFIG
+  // =========================
+  const API_ENDPOINT = "https://SEU-ENDPOINT-AQUI/api/tickets"; // <-- troque pelo Webhook/n8n
+
+  // Exemplo de FAQ (substituir pelos 49 itens do seu XLSX)
+  const FAQ = [
+    { id: 363, titulo: "O que é a campanha FF indica?", textoHtml: "<p>...</p>" },
+    { id: 364, titulo: "Como acompanhar o cadastro de Divulgadores?", textoHtml: "<p>...</p>" },
+    { id: 365, titulo: "Como o Divulgador ganha dinheiro?", textoHtml: "<p>...</p>" },
+  ];
+
+  // =========================
+  // HELPERS
+  // =========================
+  const chat = document.getElementById("chat");
+  const text = document.getElementById("text");
+
+  function now(){
+    const d = new Date();
+    return d.toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
+  }
+
+  function addMsg(who, html){
+    const wrap = document.createElement("div");
+    wrap.className = "msg " + who;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = html;
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = now();
+
+    if (who === "bot"){
+      wrap.appendChild(bubble);
+      wrap.appendChild(meta);
+    } else {
+      wrap.appendChild(meta);
+      wrap.appendChild(bubble);
+    }
+
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function quickButtons(buttons){
+    const div = document.createElement("div");
+    div.className = "quick";
+    buttons.forEach(b=>{
+      const c = document.createElement("div");
+      c.className = "chip";
+      c.textContent = b.label;
+      c.onclick = b.onClick;
+      div.appendChild(c);
+    });
+    addMsg("bot", `<div>Escolha uma opção:</div>` + div.outerHTML);
+  }
+
+  function escapeHtml(s){
+    return String(s || "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function normalizeDigits(v){
+    return String(v || "").replace(/\D+/g,"");
+  }
+
+  // =========================
+  // UI: FAQ LIST
+  // =========================
+  const faqList = document.getElementById("faqList");
+  function renderFaqList(){
+    faqList.innerHTML = "";
+    FAQ.slice(0, 20).forEach(item=>{
+      const div = document.createElement("div");
+      div.className = "faqitem";
+      div.textContent = item.titulo;
+      div.onclick = () => {
+        addMsg("user", escapeHtml(item.titulo));
+        addMsg("bot", item.textoHtml + `<div class="quick">
+          <div class="chip" id="solvedYes">✅ Resolvido</div>
+          <div class="chip" id="solvedNo">🛠️ Abrir chamado</div>
+        </div>`);
+        // attach actions
+        setTimeout(()=>{
+          const yes = document.getElementById("solvedYes");
+          const no = document.getElementById("solvedNo");
+          if(yes) yes.onclick = ()=> addMsg("bot", "Perfeito! Se precisar de algo, é só me chamar 🙂");
+          if(no) no.onclick = ()=> openForm(item.titulo);
+        }, 0);
+      };
+      faqList.appendChild(div);
+    });
+  }
+  renderFaqList();
+
+  // =========================
+  // UI: FORM TOGGLE
+  // =========================
+  const faqCard  = document.getElementById("faqCard");
+  const formCard = document.getElementById("formCard");
+
+  function openFaq(){
+    faqCard.style.display="block";
+    formCard.style.display="none";
+    addMsg("bot", "Aqui estão alguns tópicos de FAQ no painel ao lado. Clique em um deles 🙂");
+  }
+
+  function openForm(prefillTopic){
+    faqCard.style.display="none";
+    formCard.style.display="block";
+    addMsg("bot", "Vamos abrir um chamado. Preencha o formulário ao lado e clique em <strong>Enviar chamado</strong>.");
+    if(prefillTopic){
+      document.getElementById("formHint").innerHTML =
+        `Tema selecionado: <strong>${escapeHtml(prefillTopic)}</strong>. (Você pode detalhar na descrição.)`;
+    } else {
+      document.getElementById("formHint").innerHTML =
+        "Ao enviar, sua solicitação será encaminhada via API para a ferramenta do time de TI.";
+    }
+  }
+
+  // =========================
+  // CHAT FLOW: INIT
+  // =========================
+  addMsg("bot", "Olá! Eu sou o suporte da <strong>More Buzz</strong> 😄<br/>Você quer consultar a FAQ ou abrir um chamado?");
+  quickButtons([
+    { label:"📚 Ver FAQ", onClick: openFaq },
+    { label:"🛠️ Abrir chamado", onClick: ()=> openForm() }
+  ]);
+
+  // =========================
+  // EVENTS
+  // =========================
+  document.getElementById("btnFaq").onclick = openFaq;
+  document.getElementById("btnOpenFaq").onclick = openFaq;
+  document.getElementById("btnOpenForm").onclick = ()=> openForm();
+
+  document.getElementById("btnSend").onclick = () => {
+    const v = text.value.trim();
+    if(!v) return;
+    addMsg("user", escapeHtml(v));
+    text.value = "";
+    // Resposta simples (MVP): direciona para FAQ/form
+    addMsg("bot", "Entendi. Para agilizar, escolha <strong>FAQ</strong> ou <strong>Abrir chamado</strong> no painel ao lado.");
+  };
+
+  text.addEventListener("keydown", (e)=>{
+    if(e.key==="Enter") document.getElementById("btnSend").click();
+  });
+
+  document.getElementById("btnCancelForm").onclick = () => {
+    formCard.style.display="none";
+    faqCard.style.display="block";
+    addMsg("bot", "Tudo bem — se preferir, consulte a FAQ primeiro.");
+  };
+
+  // =========================
+  // SUBMIT TICKET (API)
+  // =========================
+  document.getElementById("ticketForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+
+    const payload = {
+      nomeCompleto: fd.get("nomeCompleto"),
+      email: fd.get("email"),
+      telefone: fd.get("telefone"),
+      tipoSolicitacao: fd.get("tipoSolicitacao"),
+      descricao: fd.get("descricao") || "",
+      cpfCnpj: fd.get("cpfCnpj") || "",
+      origem: "chat-morebuzz",
+      createdAt: new Date().toISOString()
+    };
+
+    // normalizações leves
+    payload.telefone = normalizeDigits(payload.telefone);
+    payload.cpfCnpj  = normalizeDigits(payload.cpfCnpj);
+
+    addMsg("user", `✅ Enviar chamado: <strong>${escapeHtml(payload.tipoSolicitacao)}</strong>`);
+
+    try{
+      addMsg("bot", "Enviando sua solicitação para o time de TI…");
+
+      const res = await fetch(API_ENDPOINT, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if(!res.ok){
+        const t = await res.text();
+        throw new Error(`HTTP ${res.status} - ${t}`);
+      }
+
+      const data = await res.json(); // espera { ticketId, status, message }
+      const protocolo = data.ticketId || data.protocolo || "gerado";
+      addMsg("bot", `Chamado registrado com sucesso ✅<br/><strong>Protocolo:</strong> ${escapeHtml(protocolo)}<br/>Se necessário, o time entrará em contato por e-mail/WhatsApp.`);
+      e.target.reset();
+
+    }catch(err){
+      console.error(err);
+      addMsg("bot", `⚠️ Não consegui registrar agora.<br/>Tente novamente em instantes ou contate o suporte.<br/><span style="opacity:.75;font-size:12px;">${escapeHtml(err.message)}</span>`);
+    }
+  });
+</script>
+</body>
+</html>
