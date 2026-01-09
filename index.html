@@ -1,543 +1,641 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>More Buzz • Suporte</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Suporte More Buzz</title>
   <style>
     :root{
-      --mb-purple:#6A00FF;
-      --mb-purple-2:#8A2BFF;
-      --mb-yellow:#FFC400;
-      --mb-ink:#0E1020;
-      --mb-bg:#0B0C14;
-      --mb-card:#11142A;
-      --mb-line:rgba(255,255,255,.10);
-      --mb-muted:rgba(255,255,255,.72);
-      --mb-white:#FFFFFF;
-      --radius-xl:18px;
-      --radius-lg:14px;
-      --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --shadow-soft: 0 10px 25px rgba(0,0,0,.35);
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue";
+      --bg:#070718;
+      --panel:#0b0b22;
+      --panel2:#0f0f2b;
+      --text:#e8e8ff;
+      --muted:#b7b7d6;
+      --chip:#1a1a3c;
+      --chipBorder:#2a2a55;
+      --accent:#7c3aed;
+      --accent2:#a78bfa;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --radius:18px;
+      --radius2:26px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:var(--font);
-      background:
-        radial-gradient(900px 500px at 20% 10%, rgba(106,0,255,.25), transparent 60%),
-        radial-gradient(700px 450px at 80% 20%, rgba(255,196,0,.14), transparent 55%),
-        linear-gradient(180deg, var(--mb-bg), #070812 70%);
-      color:var(--mb-white);
-      min-height:100vh;
+      background:radial-gradient(1200px 600px at 25% 10%, rgba(124,58,237,.22), transparent 60%),
+                 radial-gradient(900px 500px at 85% 30%, rgba(167,139,250,.18), transparent 55%),
+                 var(--bg);
+      color:var(--text);
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:18px;
+      min-height:100vh;
+      padding:22px;
     }
-    .panel{
-      width:min(920px, 100%);
-      border:1px solid var(--mb-line);
-      background: linear-gradient(180deg, rgba(17,20,42,.92), rgba(12,13,26,.92));
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
+    .app{
+      width:min(1100px, 100%);
+      height:min(760px, 100vh - 44px);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
     }
     .header{
-      padding:16px 16px 14px;
-      border-bottom:1px solid var(--mb-line);
+      padding:18px 22px;
+      background:linear-gradient(90deg, rgba(124,58,237,.35), rgba(0,0,0,0));
+      border-bottom:1px solid rgba(255,255,255,.08);
       display:flex;
-      gap:12px;
       align-items:center;
-      background: linear-gradient(90deg, rgba(106,0,255,.22), rgba(255,196,0,.10));
+      gap:12px;
     }
     .logo{
-      width:44px;height:44px;border-radius:14px;
-      background: radial-gradient(circle at 30% 25%, var(--mb-yellow), rgba(255,196,0,.25) 55%, rgba(106,0,255,.35) 75%),
-                  linear-gradient(135deg, rgba(106,0,255,.75), rgba(106,0,255,.15));
-      box-shadow: var(--shadow-soft);
-      display:grid; place-items:center;
-      font-weight:900;
-      color:var(--mb-ink);
-      letter-spacing:-.5px;
+      width:40px;height:40px;border-radius:14px;
+      background:radial-gradient(circle at 30% 30%, #fbbf24, transparent 55%),
+                 radial-gradient(circle at 70% 70%, #7c3aed, #3b0764);
+      display:grid;place-items:center;
+      font-weight:800;
+      letter-spacing:.5px;
     }
-    .titleblock{display:flex;flex-direction:column;line-height:1.15}
-    .titleblock .t1{font-weight:800;font-size:14px;letter-spacing:.2px}
-    /* ✅ removido subtítulo do header (t2 não será mais usado) */
+    .title{
+      font-size:18px;
+      font-weight:700;
+    }
     .chat{
-      height: 620px; /* ganhou espaço ao remover a barra inferior */
-      padding:14px;
+      padding:18px;
+      flex:1;
       overflow:auto;
-      scroll-behavior:smooth;
+      background:linear-gradient(180deg, rgba(15,15,43,.55), rgba(8,8,24,.65));
     }
-    .msg{display:flex;margin:10px 0;gap:10px;align-items:flex-end}
-    .msg.bot{justify-content:flex-start}
-    .msg.user{justify-content:flex-end}
+    .row{
+      display:flex;
+      gap:10px;
+      margin:10px 0;
+      align-items:flex-end;
+    }
+    .row.bot{ justify-content:flex-start; }
+    .row.user{ justify-content:flex-end; }
     .bubble{
-      max-width: 82%;
-      padding:12px 12px;
-      border-radius: 16px;
-      border:1px solid var(--mb-line);
-      background: rgba(0,0,0,.18);
-      box-shadow: 0 6px 16px rgba(0,0,0,.25);
-      font-size:13.5px;
-      line-height:1.45;
+      max-width:min(680px, 92%);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:12px 14px;
+      line-height:1.35;
+      color:var(--text);
+      backdrop-filter: blur(10px);
     }
-    .msg.user .bubble{
-      background: linear-gradient(135deg, rgba(106,0,255,.65), rgba(138,43,255,.35));
-      border-color: rgba(255,255,255,.12);
+    .row.user .bubble{
+      background:linear-gradient(180deg, rgba(124,58,237,.85), rgba(124,58,237,.55));
+      border-color:rgba(167,139,250,.45);
     }
-    .msg.bot .bubble{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    .time{
+      font-size:12px;
+      color:rgba(255,255,255,.55);
+      margin:0 6px 2px;
     }
-    .meta{
-      font-size:11px;
-      color: rgba(255,255,255,.55);
-      margin:0 4px 2px;
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
     }
-
-    .quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
     .chip{
-      border:1px solid var(--mb-line);
-      background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.92);
-      padding:8px 12px;
-      border-radius: 999px;
-      font-size:12.5px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
       cursor:pointer;
       user-select:none;
+      transition:.15s ease;
+      font-weight:600;
+      font-size:14px;
     }
-    .chip:hover{border-color: rgba(255,255,255,.20)}
+    .chip:hover{
+      transform:translateY(-1px);
+      border-color:rgba(167,139,250,.55);
+      background:rgba(124,58,237,.10);
+    }
+    .chip.primary{
+      background:rgba(124,58,237,.20);
+      border-color:rgba(167,139,250,.45);
+    }
+    .card{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px;
+      margin-top:10px;
+    }
+    .card h4{ margin:0 0 8px; font-size:14px; color:var(--muted); font-weight:700; letter-spacing:.2px; }
+    .card p{ margin:0; color:var(--text); }
+    .divider{
+      height:1px;
+      background:rgba(255,255,255,.08);
+      margin:12px 0;
+    }
 
-    /* MODAL (segunda tela) */
-    .modal{
+    /* Modal */
+    .modalWrap{
       position:fixed; inset:0;
       display:none;
-      align-items:center; justify-content:center;
-      background: rgba(0,0,0,.55);
-      padding:18px;
-      z-index:9999;
+      background:rgba(0,0,0,.55);
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      z-index:50;
     }
-    .modal.show{display:flex}
-    .modalBox{
-      width:min(760px, 100%);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(17,20,42,.98), rgba(10,11,22,.98));
-      box-shadow: var(--shadow);
+    .modal{
+      width:min(720px, 100%);
+      background:linear-gradient(180deg, rgba(15,15,43,.98), rgba(10,10,28,.98));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
     .modalHeader{
-      padding:14px 16px;
-      display:flex; align-items:center; gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(90deg, rgba(106,0,255,.22), rgba(255,196,0,.10));
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(90deg, rgba(124,58,237,.30), rgba(0,0,0,0));
     }
-    .modalHeader .h1{font-weight:900}
-    .modalHeader .h2{font-size:12px;color:var(--mb-muted)}
-    .modalHeader .sp{margin-left:auto; display:flex; gap:10px}
-    .xbtn{
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(255,255,255,.9);
-      border-radius: 12px;
-      padding:8px 10px;
+    .modalHeader strong{ font-size:15px }
+    .closeBtn{
+      border:none;
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      width:36px;height:36px;
+      border-radius:12px;
       cursor:pointer;
-      font-weight:800;
+      font-size:18px;
     }
-    .modalBody{padding:16px}
-    .form{
+    .modalBody{ padding:16px 18px; }
+    .grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
     }
-    .full{grid-column:1 / -1}
-    label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:rgba(255,255,255,.86)}
-    .field, select, textarea, input[type="file"]{
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    label{ font-size:13px; color:var(--muted); font-weight:700; }
+    input, select, textarea{
+      border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      color: var(--mb-white);
-      border-radius: 14px;
-      padding:10px 10px;
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 12px;
       outline:none;
-      font-size:13px;
+      font-family:var(--font);
     }
-    textarea{min-height: 98px; resize: vertical;}
-    .req{color: var(--mb-yellow); font-weight:900}
-    .hint{font-size:11.5px;color:rgba(255,255,255,.60);margin-top:6px}
-    .actions{display:flex;gap:10px;margin-top:12px}
-
+    textarea{ min-height:110px; resize:vertical; }
+    .modalFooter{
+      padding:14px 18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+    }
     .btn{
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(135deg, var(--mb-yellow), rgba(255,196,0,.65));
-      color: var(--mb-ink);
-      padding:11px 14px;
-      border-radius: 14px;
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:800;
       cursor:pointer;
-      font-weight:900;
-      font-size:12.5px;
-      box-shadow: 0 10px 22px rgba(255,196,0,.18);
-      white-space:nowrap;
+      color:var(--text);
+      background:rgba(255,255,255,.10);
     }
-    .btn.secondary{
-      background: rgba(255,255,255,.08);
-      color: rgba(255,255,255,.92);
-      box-shadow:none;
+    .btn.primary{
+      background:linear-gradient(180deg, rgba(124,58,237,.95), rgba(124,58,237,.65));
+      border:1px solid rgba(167,139,250,.45);
+    }
+    .btn.danger{
+      background:rgba(239,68,68,.22);
+      border:1px solid rgba(239,68,68,.45);
+    }
+    .note{
+      font-size:12px;
+      color:rgba(255,255,255,.65);
+      margin-top:8px;
+      line-height:1.35;
+    }
+    @media (max-width:720px){
+      .grid{ grid-template-columns:1fr; }
     }
   </style>
 </head>
-
 <body>
-  <section class="panel">
+  <div class="app">
     <div class="header">
       <div class="logo">mb</div>
-      <div class="titleblock">
-        <div class="t1">Suporte More Buzz</div>
-      </div>
-      <!-- ✅ removido "online" -->
+      <div class="title">Suporte More Buzz</div>
     </div>
 
-    <div class="chat" id="chat"></div>
+    <div id="chat" class="chat"></div>
+  </div>
 
-    <!-- ✅ removido composer (campo de digitação + botões inferiores) -->
-  </section>
-
-  <!-- MODAL: ABERTURA DE CHAMADO (segunda tela) -->
-  <div class="modal" id="modal">
-    <div class="modalBox">
+  <!-- Modal Chamado -->
+  <div id="modalWrap" class="modalWrap">
+    <div class="modal">
       <div class="modalHeader">
-        <div>
-          <div class="h1">Abertura de Chamado</div>
-          <div class="h2" id="ticketSubtitle">Envie sua solicitação para o time responsável</div>
-        </div>
-        <div class="sp">
-          <button class="xbtn" id="btnClose">Fechar</button>
-        </div>
+        <strong>Abertura de Chamado</strong>
+        <button class="closeBtn" id="closeModalBtn">×</button>
       </div>
-
-      <div class="modalBody">
-        <form id="ticketForm" class="form">
-          <label class="full">Nome completo <span class="req">*</span>
-            <input class="field" name="nomeCompleto" required />
-          </label>
-
-          <label>E-mail <span class="req">*</span>
-            <input class="field" name="email" type="email" required />
-          </label>
-
-          <label>Telefone (WhatsApp) <span class="req">*</span>
-            <input class="field" name="telefone" placeholder="DDD + número" required />
-          </label>
-
-          <label class="full">Tipo solicitação <span class="req">*</span>
-            <select name="tipoSolicitacao" required>
-              <option value="" selected disabled>Selecione…</option>
-              <option>Problema técnico</option>
-              <option>Dúvida</option>
-              <option>Solicitação</option>
-            </select>
-          </label>
-
-          <label class="full">Descrição da solicitação (opcional)
-            <textarea name="descricao" placeholder="Conte o cenário, onde ocorreu e, se houver, mensagem de erro."></textarea>
-          </label>
-
-          <label class="full">CPF/CNPJ (opcional)
-            <input class="field" name="cpfCnpj" placeholder="Somente números (se preferir)" />
-          </label>
-
-          <!-- ✅ NOVO: anexar evidência -->
-          <label class="full">Anexar evidência (opcional)
-            <input
-              class="field"
-              type="file"
-              name="evidencia"
-              accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-            />
-            <div class="hint">Formatos aceitos: PDF, PNG, JPG/JPEG.</div>
-          </label>
-
-          <div class="full hint" id="ticketHint">
-            Ao enviar, os dados serão encaminhados via API para o CRM responsável por tratar o chamado.
+      <form id="ticketForm">
+        <div class="modalBody">
+          <div class="grid">
+            <div class="field">
+              <label>Nome completo</label>
+              <input name="nomeCompleto" required />
+            </div>
+            <div class="field">
+              <label>E-mail</label>
+              <input name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label>Telefone</label>
+              <input name="telefone" required />
+            </div>
+            <div class="field">
+              <label>Tipo de solicitação</label>
+              <select name="tipoSolicitacao" required>
+                <option value="">Selecione</option>
+                <option value="duvida">Dúvida</option>
+                <option value="erro">Erro</option>
+                <option value="acesso">Acesso</option>
+                <option value="pagamento">Pagamento</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
           </div>
 
-          <div class="full actions">
-            <button type="button" class="btn secondary" id="btnCancel">Cancelar</button>
-            <button type="submit" class="btn" id="btnSubmit">Enviar chamado</button>
+          <div class="field" style="margin-top:12px;">
+            <label>Descrição</label>
+            <textarea name="descricao" placeholder="Descreva o que está acontecendo (passo a passo)"></textarea>
+            <div class="note">Se tiver evidência (print, vídeo, arquivo), envie abaixo.</div>
           </div>
-        </form>
-      </div>
+
+          <div class="field" style="margin-top:10px;">
+            <label>Evidência (opcional)</label>
+            <input name="evidencia" type="file" />
+          </div>
+        </div>
+
+        <div class="modalFooter">
+          <button type="button" class="btn danger" id="cancelTicketBtn">Cancelar</button>
+          <button type="submit" class="btn primary">Enviar chamado</button>
+        </div>
+      </form>
     </div>
   </div>
 
 <script>
-  // =========================
-  // CONFIG (n8n)
-  // =========================
-  // Endpoint que responde o "Guia rápido" com base na FAQ (resumo prático)
-  const GUIDE_ENDPOINT  = "https://bitter-hat-f13.asilvino19.workers.dev/webhook/mb/guia";
+  // ========= Endpoints =========
+  // Ajuste se necessário para seus endpoints reais (Cloudflare Worker / n8n).
+  const GUIDE_ENDPOINT  = "https://silvino30.workers.dev/webhook/mb/guia";
+  const TICKET_ENDPOINT = "https://silvino30.workers.dev/webhook/mb/chamado";
 
-  // Endpoint que recebe abertura de chamado (com anexo)
-  const TICKET_ENDPOINT = "https://bitter-hat-f13.asilvino19.workers.dev/webhook/mb/chamado";
+  // ========= Helpers UI =========
+  const chatEl = document.getElementById("chat");
+  const modalWrap = document.getElementById("modalWrap");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const cancelTicketBtn = document.getElementById("cancelTicketBtn");
+  const ticketForm = document.getElementById("ticketForm");
 
-  // =========================
-  // STATE
-  // =========================
-  let currentTopic = null;
-
-  // =========================
-  // HELPERS
-  // =========================
-  const chat = document.getElementById("chat");
-
-  function now(){
+  function nowTime(){
     const d = new Date();
     return d.toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
   }
 
-  function escapeHtml(s){
-    return String(s || "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  function addMsg(who, html){
-    const wrap = document.createElement("div");
-    wrap.className = "msg " + who;
-
+  function addRow(role, html){
+    const row = document.createElement("div");
+    row.className = "row " + role;
     const bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.innerHTML = html;
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = now();
-
-    if (who === "bot"){
-      wrap.appendChild(bubble);
-      wrap.appendChild(meta);
-    } else {
-      wrap.appendChild(meta);
-      wrap.appendChild(bubble);
+    const time = document.createElement("div");
+    time.className = "time";
+    time.textContent = nowTime();
+    if(role === "bot"){
+      row.appendChild(bubble);
+      row.appendChild(time);
+    }else{
+      row.appendChild(time);
+      row.appendChild(bubble);
     }
-
-    chat.appendChild(wrap);
-    chat.scrollTop = chat.scrollHeight;
-    return bubble; // <- para anexar botões reais dentro do bubble
+    chatEl.appendChild(row);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return bubble;
   }
 
-  // ✅ FIX: cria chips como DOM (clicáveis), sem outerHTML
-  function quickButtons(buttons, intro="Escolha uma opção:"){
-    const bubble = addMsg("bot", `<div>${intro}</div>`);
-    const div = document.createElement("div");
-    div.className = "quick";
+  function addBot(text){
+    return addRow("bot", `<div>${escapeHtml(text)}</div>`);
+  }
+  function addUser(text){
+    return addRow("user", `<div>${escapeHtml(text)}</div>`);
+  }
 
-    buttons.forEach(b=>{
-      const c = document.createElement("div");
-      c.className = "chip";
-      c.textContent = b.label;
-      c.addEventListener("click", b.onClick);
-      div.appendChild(c);
+  function addChips(role, title, chips){
+    const bubble = addRow(role, `
+      <div><strong>${escapeHtml(title)}</strong></div>
+      <div class="chips"></div>
+    `);
+    const chipsEl = bubble.querySelector(".chips");
+    chips.forEach(c => {
+      const btn = document.createElement("div");
+      btn.className = "chip " + (c.primary ? "primary" : "");
+      btn.textContent = c.label;
+      btn.onclick = c.onClick;
+      chipsEl.appendChild(btn);
     });
-
-    bubble.appendChild(div);
+    return bubble;
   }
 
-  function onlyDigits(v){
-    return String(v || "").replace(/\D+/g,"");
+  function addCard(title, text){
+    return addRow("bot", `
+      <div class="card">
+        <h4>${escapeHtml(title)}</h4>
+        <p>${escapeHtml(text)}</p>
+      </div>
+    `);
   }
 
-  // =========================
-  // GUIA RÁPIDO (fluxo via n8n)
-  // =========================
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // ========= API Helpers =========
+  async function postJSON(url, payload){
+    const res = await fetch(url, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(()=> ({}));
+    return { ok: res.ok, status: res.status, data };
+  }
+
+  // ========= Normalizadores (tolerância ao back atual) =========
+  // list_topics: aceita {topics:[{topicId,title}]} OU {options:[{id,label}]}
+  function normalizeTopics(data){
+    if(!data) return [];
+    if(Array.isArray(data.topics)){
+      return data.topics.map(t => ({
+        topicId: t.topicId ?? t.id,
+        title: t.title ?? t.label ?? String(t.topicId ?? t.id ?? "")
+      })).filter(t => t.topicId);
+    }
+    if(Array.isArray(data.options)){
+      return data.options.map(o => ({
+        topicId: o.id,
+        title: o.label ?? String(o.id ?? "")
+      })).filter(t => t.topicId);
+    }
+    return [];
+  }
+
+  // answer: aceita {summary, canExpand, question} OU {answer_short/answer_full/resumo_rapido}
+  function normalizeAnswer(data){
+    const question =
+      data?.question ||
+      data?.pergunta ||
+      "";
+
+    const summary =
+      data?.summary ||
+      data?.resumo_rapido ||
+      data?.answer_short ||
+      data?.answer ||
+      "";
+
+    const detail =
+      data?.detail ||
+      data?.answer_full ||
+      "";
+
+    const canExpand =
+      typeof data?.canExpand === "boolean"
+        ? data.canExpand
+        : !!detail;
+
+    return { question, summary, detail, canExpand };
+  }
+
+  // expand: aceita {detail} OU {answer_full} OU {answer}
+  function normalizeExpand(data){
+    return data?.detail || data?.answer_full || data?.answer || "";
+  }
+
+  // ========= Fluxo do chat =========
+  function start(){
+    addBot("Olá! 👋 Eu sou o suporte da More Buzz. Como você quer seguir?");
+    addChips("bot", "Escolha uma opção:", [
+      { label:"Guia rápido", primary:true, onClick: () => buildGuideMenu() },
+      { label:"Abrir chamado", onClick: () => openTicketModal() },
+    ]);
+  }
+
+  // Categorias (pode continuar fixo no front)
+  const CATEGORIES = [
+    { id:"campanha", label:"Sobre a campanha" },
+    { id:"cadastro_acesso", label:"Cadastro e acesso" },
+    { id:"acompanhamento", label:"Acompanhamento" },
+    { id:"link_qr", label:"Link e QR Code" },
+    { id:"pagamentos_resgate", label:"Pagamentos e resgate" },
+    { id:"divulgacao_materiais", label:"Divulgação e materiais" }
+  ];
+
   function buildGuideMenu(){
-    // 1) pede categorias ao n8n (ou lista fixa, se preferirem)
-    // Aqui vamos simplificar: chamamos o n8n pedindo o menu inicial
-    addMsg("user", "Guia rápido");
-    addMsg("bot", "Certo — me diz o que você quer entender 👇");
-
-    // Menu inicial (pode vir do n8n também, mas manter fixo é estável)
-    const categories = [
-      { id: "campanha", label: "Sobre a campanha" },
-      { id: "cadastro", label: "Cadastro e acesso" },
-      { id: "acompanhamento", label: "Acompanhamento" },
-      { id: "qr", label: "Link e QR Code" },
-      { id: "pagamentos", label: "Pagamentos e resgate" },
-      { id: "materiais", label: "Divulgação e materiais" }
-    ];
-
-    quickButtons(
-      categories.map(c => ({
-        label: c.label,
-        onClick: () => buildTopicsMenu(c.id, c.label)
-      })),
-      "Escolha um tema:"
-    );
+    addUser("Guia rápido");
+    addBot("Certo — me diz o que você quer entender 👇");
+    addChips("bot", "Escolha um tema:", CATEGORIES.map(c => ({
+      label: c.label,
+      primary:false,
+      onClick: () => buildTopicsMenu(c.id, c.label)
+    })));
   }
 
   async function buildTopicsMenu(categoryId, categoryLabel){
-    addMsg("user", categoryLabel);
-    addMsg("bot", "Beleza — selecione uma opção:");
+    addUser(categoryLabel);
 
-    try{
-      const res = await fetch(GUIDE_ENDPOINT, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ action: "list_topics", categoryId })
-      });
+    // chama back
+    const { ok, data } = await postJSON(GUIDE_ENDPOINT, {
+      action: "list_topics",
+      categoryId
+    });
 
-      if(!res.ok) throw new Error("Falha ao carregar tópicos.");
-      const data = await res.json(); // { topics: [{topicId,title}] }
-
-      quickButtons(
-        (data.topics || []).slice(0, 10).map(t => ({
-          label: t.title,
-          onClick: () => answerTopic(t.topicId, t.title)
-        })),
-        "Qual ponto você quer entender?"
-      );
-
-    }catch(e){
-      addMsg("bot", "Não consegui carregar as opções agora. Você pode abrir um chamado e o time te ajuda ✅");
+    if(!ok){
+      addBot("Tive um problema ao carregar as perguntas. Tenta novamente ou abra um chamado.");
+      addChips("bot","O que você prefere?",[
+        {label:"Tentar de novo", primary:true, onClick:()=> buildTopicsMenu(categoryId, categoryLabel)},
+        {label:"Abrir chamado", onClick:()=> openTicketModal()}
+      ]);
+      return;
     }
+
+    const topics = normalizeTopics(data);
+
+    if(!topics.length){
+      addBot("Não encontrei perguntas nesse tema. Quer abrir um chamado?");
+      addChips("bot","Escolha:",[
+        {label:"Abrir chamado", primary:true, onClick:()=> openTicketModal()},
+        {label:"Voltar ao guia", onClick:()=> buildGuideMenu()}
+      ]);
+      return;
+    }
+
+    addChips("bot", "Beleza — selecione uma opção:", topics.map(t => ({
+      label: t.title,
+      primary:false,
+      onClick: () => answerTopic(t.topicId, t.title)
+    })));
   }
 
   async function answerTopic(topicId, title){
-    currentTopic = title;
-    addMsg("user", title);
+    addUser(title);
 
-    try{
-      const res = await fetch(GUIDE_ENDPOINT, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ action: "answer", topicId })
-      });
+    const { ok, data } = await postJSON(GUIDE_ENDPOINT, {
+      action: "answer",
+      topicId
+    });
 
-      if(!res.ok) throw new Error("Falha ao carregar resposta.");
-      const data = await res.json(); // { summary, canExpand }
-
-      addMsg("bot",
-        `<div><strong>Resumo rápido:</strong></div>
-         <div style="margin-top:8px;">${escapeHtml(data.summary || "")}</div>`
-      );
-
-      quickButtons(
-        [
-          ...(data.canExpand ? [{
-            label: "Detalhar mais",
-            onClick: () => expandTopic(topicId)
-          }] : []),
-          { label: "Resolvido", onClick: () => addMsg("bot","Perfeito ✅ Se precisar, estou por aqui.") },
-          { label: "Abrir chamado", onClick: () => openTicketModal(`Tema: ${title}`) }
-        ],
-        "Como você quer seguir?"
-      );
-
-    }catch(e){
-      addMsg("bot", "Não consegui carregar essa resposta agora. Você pode abrir um chamado e o time te ajuda ✅");
+    if(!ok){
+      addBot("Não consegui carregar a resposta agora. Quer abrir um chamado?");
+      addChips("bot","Escolha:",[
+        {label:"Abrir chamado", primary:true, onClick:()=> openTicketModal()},
+        {label:"Voltar ao guia", onClick:()=> buildGuideMenu()}
+      ]);
+      return;
     }
+
+    const { question, summary, detail, canExpand } = normalizeAnswer(data);
+
+    if(question) addCard("Pergunta", question);
+    if(summary) addCard("Resposta", summary);
+    else addBot("Não encontrei resposta para esse item. Quer abrir um chamado?");
+
+    const chips = [];
+    if(canExpand){
+      chips.push({ label:"Detalhar mais", primary:true, onClick:()=> expandTopic(topicId, detail) });
+    }
+    chips.push({ label:"Resolvido", onClick:()=> resolvedFlow() });
+    chips.push({ label:"Abrir chamado", onClick:()=> openTicketModal() });
+
+    addChips("bot", "Como você quer seguir?", chips);
   }
 
-  async function expandTopic(topicId){
-    addMsg("user", "Detalhar mais");
+  async function expandTopic(topicId, cachedDetail){
+    addUser("Detalhar mais");
 
-    try{
-      const res = await fetch(GUIDE_ENDPOINT, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ action: "expand", topicId })
-      });
-
-      if(!res.ok) throw new Error("Falha ao detalhar.");
-      const data = await res.json(); // { detail }
-
-      addMsg("bot", `<div>${escapeHtml(data.detail || "")}</div>`);
-    }catch(e){
-      addMsg("bot", "Não consegui detalhar agora. Se preferir, abra um chamado ✅");
+    // Se já veio detail no "answer", usa direto (economiza chamada)
+    if(cachedDetail){
+      addCard("Detalhamento", cachedDetail);
+      addChips("bot","Mais alguma coisa?",[
+        {label:"Voltar ao guia", primary:true, onClick:()=> buildGuideMenu()},
+        {label:"Abrir chamado", onClick:()=> openTicketModal()},
+      ]);
+      return;
     }
+
+    const { ok, data } = await postJSON(GUIDE_ENDPOINT, {
+      action: "expand",
+      topicId
+    });
+
+    if(!ok){
+      addBot("Não consegui detalhar agora. Quer abrir um chamado?");
+      addChips("bot","Escolha:",[
+        {label:"Abrir chamado", primary:true, onClick:()=> openTicketModal()},
+        {label:"Voltar ao guia", onClick:()=> buildGuideMenu()}
+      ]);
+      return;
+    }
+
+    const detail = normalizeExpand(data);
+    if(detail) addCard("Detalhamento", detail);
+    else addBot("Não encontrei detalhamento para esse item.");
+
+    addChips("bot","Mais alguma coisa?",[
+      {label:"Voltar ao guia", primary:true, onClick:()=> buildGuideMenu()},
+      {label:"Abrir chamado", onClick:()=> openTicketModal()},
+    ]);
   }
 
-  // =========================
-  // MODAL (Chamado)
-  // =========================
-  const modal = document.getElementById("modal");
-  const ticketHint = document.getElementById("ticketHint");
+  function resolvedFlow(){
+    addUser("Resolvido");
+    addBot("Perfeito! Se precisar de algo, é só chamar 🙂");
+    addChips("bot","Quer fazer mais alguma coisa?",[
+      {label:"Guia rápido", primary:true, onClick:()=> buildGuideMenu()},
+      {label:"Abrir chamado", onClick:()=> openTicketModal()},
+    ]);
+  }
 
-  function openTicketModal(prefill){
-    modal.classList.add("show");
-    ticketHint.innerHTML = prefill
-      ? `Contexto selecionado: <strong>${escapeHtml(prefill)}</strong>. (Opcional: detalhe na descrição.)`
-      : "Ao enviar, os dados serão encaminhados via API para o CRM responsável por tratar o chamado.";
+  // ========= Chamado =========
+  function openTicketModal(){
+    modalWrap.style.display = "flex";
   }
   function closeTicketModal(){
-    modal.classList.remove("show");
+    modalWrap.style.display = "none";
+    ticketForm.reset();
   }
 
-  document.getElementById("btnClose").onclick = closeTicketModal;
-  document.getElementById("btnCancel").onclick = closeTicketModal;
-  modal.addEventListener("click", (e)=>{ if(e.target === modal) closeTicketModal(); });
+  closeModalBtn.onclick = closeTicketModal;
+  cancelTicketBtn.onclick = closeTicketModal;
+  modalWrap.addEventListener("click", (e)=>{
+    if(e.target === modalWrap) closeTicketModal();
+  });
 
-  // submit do chamado (✅ agora com FormData para suportar anexo)
-  document.getElementById("ticketForm").addEventListener("submit", async (e)=>{
+  ticketForm.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    const fd = new FormData(e.target);
 
+    const fd = new FormData(ticketForm);
     const payload = {
       nomeCompleto: fd.get("nomeCompleto"),
       email: fd.get("email"),
-      telefone: onlyDigits(fd.get("telefone")),
+      telefone: fd.get("telefone"),
       tipoSolicitacao: fd.get("tipoSolicitacao"),
-      descricao: fd.get("descricao") || "",
-      cpfCnpj: onlyDigits(fd.get("cpfCnpj") || ""),
-      contexto: currentTopic || "",
-      origem: "morebuzz-chat",
-      createdAt: new Date().toISOString()
+      descricao: fd.get("descricao") || ""
     };
 
-    // envia como multipart/form-data
-    const form = new FormData();
-    form.append("data", JSON.stringify(payload));
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(payload));
 
     const file = fd.get("evidencia");
-    if(file && file instanceof File && file.size > 0){
-      form.append("evidencia", file, file.name);
-    }
+    if(file && file.name) formData.append("evidencia", file);
+
+    const res = await fetch(TICKET_ENDPOINT, { method:"POST", body: formData });
+    const data = await res.json().catch(()=> ({}));
 
     closeTicketModal();
-    addMsg("user", "Abrir chamado");
-    addMsg("bot", "Perfeito — enviando sua solicitação…");
 
-    try{
-      const res = await fetch(TICKET_ENDPOINT, { method:"POST", body: form });
-      if(!res.ok){
-        const t = await res.text();
-        throw new Error(`HTTP ${res.status} - ${t}`);
-      }
-      const data = await res.json(); // { ticketId/protocolo, status }
+    addUser("Abrir chamado");
 
-      const protocolo = data.ticketId || data.protocolo || "gerado";
-      addMsg("bot", `Chamado registrado ✅<br/><strong>Protocolo:</strong> ${escapeHtml(protocolo)}`);
-      e.target.reset();
-    }catch(err){
-      console.error(err);
-      addMsg("bot", `⚠️ Não consegui registrar agora.<br/>Tente novamente.<br/><span style="opacity:.75;font-size:12px;">${escapeHtml(err.message)}</span>`);
+    if(res.ok){
+      const protocol = data.ticketId || data.protocolo || data.id || "gerado";
+      addBot(`Chamado registrado com sucesso ✅ Protocolo: ${protocol}`);
+    }else{
+      addBot("Não consegui registrar o chamado agora. Tenta novamente.");
     }
+
+    addChips("bot","Quer mais alguma coisa?",[
+      {label:"Guia rápido", primary:true, onClick:()=> buildGuideMenu()},
+    ]);
   });
 
-  // =========================
-  // INIT
-  // =========================
-  addMsg("bot", "Olá! 👋 Eu sou o suporte da More Buzz.<br/>Como você quer seguir?");
-
-  // ✅ aqui são os únicos botões iniciais (sem ícones/textos extras)
-  quickButtons(
-    [
-      { label:"Guia rápido", onClick: buildGuideMenu },
-      { label:"Abrir chamado", onClick: () => openTicketModal("") }
-    ],
-    "Escolha uma opção:"
-  );
+  // start
+  start();
 </script>
 </body>
 </html>
